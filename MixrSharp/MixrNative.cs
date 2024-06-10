@@ -28,8 +28,20 @@ public static unsafe class MixrNative
     public static extern nuint mxContextCreateSource(nint context);
 
     [DllImport(DllName)]
+    public static extern void mxContextSetMasterVolume(nint context, float volume);
+
+    [DllImport(DllName)]
     public static extern void mxSourceSubmitBuffer(nint context, nuint source, nuint buffer);
 
     [DllImport(DllName)]
     public static extern void mxSourcePlay(nint context, nuint source);
+
+    [DllImport(DllName)]
+    public static extern void mxSourceSetSpeed(nint context, nuint source, double speed);
+    
+    [DllImport(DllName)]
+    public static extern void mxSourceSetVolume(nint context, nuint source, float volume);
+    
+    [DllImport(DllName)]
+    public static extern void mxSourceSetLooping(nint context, nuint source, bool looping);
 }

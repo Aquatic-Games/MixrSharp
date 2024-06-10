@@ -9,6 +9,8 @@ unsafe
 {
     mxCreateSDLDevice(48000, 512, out nint device);
     mxDeviceGetContext(device, out nint context);
+    
+    //mxContextSetMasterVolume(context, 0.1f);
 
     AudioFormat format = new AudioFormat(DataType.I16, 44100, Channels.Stereo);
 
@@ -18,6 +20,9 @@ unsafe
 
     nuint source = mxContextCreateSource(context);
     mxSourceSubmitBuffer(context, source, buffer);
+    //mxSourceSetSpeed(context, source, 0.15);
+    //mxSourceSetVolume(context, source, 0.5f);
+    mxSourceSetLooping(context, source, true);
     mxSourcePlay(context, source);
         
     while (true)
