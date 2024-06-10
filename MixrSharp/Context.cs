@@ -5,18 +5,18 @@ namespace MixrSharp;
 
 public class Context : IDisposable
 {
-    private nint _context;
+    private readonly nint _context;
 
     public Context(uint sampleRate)
     {
         mxCreateContext(sampleRate, out _context);
     }
 
-    public Context(IntPtr context)
+    internal Context(nint context)
     {
         _context = context;
     }
-
+    
     public void Dispose()
     {
         mxDestroyContext(_context);
