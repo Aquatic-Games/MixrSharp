@@ -7,6 +7,11 @@ public unsafe class Context : IDisposable
 {
     private readonly nint _context;
 
+    public float MasterVolume
+    {
+        set => mxContextSetMasterVolume(_context, value);
+    }
+
     public Context(uint sampleRate)
     {
         mxCreateContext(sampleRate, out _context);

@@ -9,6 +9,21 @@ public struct AudioSource : IDisposable
     
     public readonly nuint ID;
 
+    public double Speed
+    {
+        set => mxSourceSetSpeed(_context, ID, value);
+    }
+
+    public float Volume
+    {
+        set => mxSourceSetVolume(_context, ID, value);
+    }
+
+    public bool Looping
+    {
+        set => mxSourceSetLooping(_context, ID, value);
+    }
+
     internal AudioSource(UIntPtr id, IntPtr context)
     {
         ID = id;
