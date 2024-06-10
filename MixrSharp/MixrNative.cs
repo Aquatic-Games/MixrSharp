@@ -32,6 +32,9 @@ public static unsafe class MixrNative
 
     [DllImport(DllName)]
     public static extern void mxSourceSubmitBuffer(nint context, nuint source, nuint buffer);
+    
+    [DllImport(DllName)]
+    public static extern void mxSourceClearBuffers(nint context, nuint source);
 
     [DllImport(DllName)]
     public static extern void mxSourcePlay(nint context, nuint source);

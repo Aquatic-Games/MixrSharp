@@ -40,6 +40,11 @@ public struct AudioSource : IDisposable
         mxSourceSubmitBuffer(_context, ID, buffer.ID);
     }
 
+    public void ClearBuffers()
+    {
+        mxSourceClearBuffers(_context, ID);
+    }
+
     public void Play()
     {
         mxSourcePlay(_context, ID);
