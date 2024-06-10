@@ -1,15 +1,35 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using MixrSharp;
 using MixrSharp.Devices;
+using static MixrSharp.MixrNative;
 
-byte[] data = File.ReadAllBytes(@"C:\Users\ollie\Music\TESTFILES\Feeling-16bitshort.raw");
+ReadOnlySpan<byte> path = @"C:\Users\ollie\Music\DEADLOCK.wav"u8;
+nint stream;
+AudioFormat format;
+byte[] data;
+
+unsafe
+{
+    fixed (byte* pPath = path)
+        mxStreamLoadWav((sbyte*) pPath, out stream);
+
+    format = mxStreamGetFormat(stream);
+
+    nuint dataLength;
+    mxStreamGetPCM(stream, null, &dataLength);
+
+    data = new byte[dataLength];
+    fixed (byte* pData = data)
+        mxStreamGetPCM(stream, pData, &dataLength);
+    
+    mxDestroyStream(stream);
+}
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;
 //context.MasterVolume = 0.1f;
-
-AudioFormat format = new AudioFormat(DataType.I16, 44100, Channels.Stereo);
 
 AudioBuffer buffer = context.CreateBuffer(format, data);
 
