@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <None Update="libmixr.dll">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
 
