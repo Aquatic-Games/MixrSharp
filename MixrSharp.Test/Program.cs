@@ -1,37 +1,15 @@
-﻿using System;
-using System.IO;
-using System.Threading;
+﻿using System.Threading;
 using MixrSharp;
 using MixrSharp.Devices;
-using static MixrSharp.MixrNative;
+using MixrSharp.Stream;
 
-ReadOnlySpan<byte> path = @"C:\Users\ollie\Music\DEADLOCK.wav"u8;
-nint stream;
-AudioFormat format;
-byte[] data;
-
-unsafe
-{
-    fixed (byte* pPath = path)
-        mxStreamLoadWav((sbyte*) pPath, out stream);
-
-    format = mxStreamGetFormat(stream);
-
-    nuint dataLength;
-    mxStreamGetPCM(stream, null, &dataLength);
-
-    data = new byte[dataLength];
-    fixed (byte* pData = data)
-        mxStreamGetPCM(stream, pData, &dataLength);
-    
-    mxDestroyStream(stream);
-}
+using Wav wav = new Wav(@"C:\Users\ollie\Music\High Times - Singles 1992-2006\09 - High Times (Remastered).wav");
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;
 //context.MasterVolume = 0.1f;
 
-AudioBuffer buffer = context.CreateBuffer(format, data);
+AudioBuffer buffer = context.CreateBuffer(wav.Format, wav.GetPcm());
 
 AudioSource source = context.CreateSource();
 source.SubmitBuffer(buffer);
