@@ -24,6 +24,11 @@ public struct AudioSource : IDisposable
         set => mxSourceSetLooping(_context, ID, value);
     }
 
+    public float Panning
+    {
+        set => mxSourceSetPanning(_context, ID, value);
+    }
+
     internal AudioSource(UIntPtr id, IntPtr context)
     {
         ID = id;
@@ -38,6 +43,16 @@ public struct AudioSource : IDisposable
     public void Play()
     {
         mxSourcePlay(_context, ID);
+    }
+
+    public void Pause()
+    {
+        mxSourcePause(_context, ID);
+    }
+
+    public void Stop()
+    {
+        mxSourceStop(_context, ID);
     }
 
     public void Dispose()
