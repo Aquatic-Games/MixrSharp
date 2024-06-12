@@ -58,6 +58,9 @@ public static unsafe class MixrNative
     public static extern void mxSourceSetPanning(nint context, nuint source, float panning);
 
     [DllImport(DllName)]
+    public static extern void mxSourceSetChannelVolumes(nint context, nuint source, float volumeL, float volumeR);
+
+    [DllImport(DllName)]
     public static extern AudioFormat mxStreamGetFormat(nint stream);
 
     [DllImport(DllName)]

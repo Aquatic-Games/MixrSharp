@@ -35,6 +35,9 @@ public struct AudioSource : IDisposable
         _context = context;
     }
 
+    public void SetChannelVolumes(float volumeL, float volumeR)
+        => mxSourceSetChannelVolumes(_context, ID, volumeL, volumeR);
+
     public void SubmitBuffer(AudioBuffer buffer)
     {
         mxSourceSubmitBuffer(_context, ID, buffer.ID);

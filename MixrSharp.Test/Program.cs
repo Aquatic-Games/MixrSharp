@@ -30,6 +30,7 @@ foreach (string file in files)
 //source.Volume = 0.5f;
 //source.Looping = true;
 //source.Panning = -1.0f;
+//source.SetChannelVolumes(-1, 1);
 source.Play();
 
 bool test = false;
