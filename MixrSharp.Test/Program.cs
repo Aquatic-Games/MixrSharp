@@ -5,9 +5,9 @@ using MixrSharp.Stream;
 
 string[] files =
 {
-    @"C:\Users\ollie\Music\High Times - Singles 1992-2006\01 - When You Gonna Learn_.wav",
-    @"C:\Users\ollie\Music\High Times - Singles 1992-2006\02 - Too Young to Die (Remastered).wav",
-    @"C:\Users\ollie\Music\High Times - Singles 1992-2006\11 - Canned Heat (Remastered).wav"
+    "/run/media/aqua/ExtDrive/Backup 2/Music/High Times - Singles 1992-2006/01 - When You Gonna Learn_.wav",
+    "/run/media/aqua/ExtDrive/Backup 2/Music/High Times - Singles 1992-2006/02 - Too Young to Die (Remastered).wav",
+    "/run/media/aqua/ExtDrive/Backup 2/Music/High Times - Singles 1992-2006/11 - Canned Heat (Remastered).wav"
 };
 
 Device device = new SdlDevice(48000);
@@ -26,7 +26,7 @@ foreach (string file in files)
 //source.ClearBuffers();
 
 //source.SubmitBuffer(buffer);
-//source.Speed = 10;
+//source.Speed = 1.15;
 //source.Volume = 0.5f;
 //source.Looping = true;
 //source.Panning = -1.0f;
