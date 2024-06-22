@@ -5,6 +5,10 @@ namespace MixrSharp.Stream;
 
 public class Wav : AudioStream
 {
+    public bool IsAdpcm => mxWavIsADPCM(Stream);
+
+    public AdpcmInfo AdpcmInfo => mxWavGetADPCMInfo(Stream);
+    
     public unsafe Wav(string path)
     {
         byte[] bytes = Encoding.UTF8.GetBytes(path);

@@ -3,25 +3,24 @@ using MixrSharp;
 using MixrSharp.Devices;
 using MixrSharp.Stream;
 
-string[] files =
-{
-    "/run/media/aqua/ExtDrive/Backup 2/Music/High Times - Singles 1992-2006/01 - When You Gonna Learn_.wav",
-    "/run/media/aqua/ExtDrive/Backup 2/Music/High Times - Singles 1992-2006/02 - Too Young to Die (Remastered).wav",
-    "/run/media/aqua/ExtDrive/Backup 2/Music/High Times - Singles 1992-2006/11 - Canned Heat (Remastered).wav"
-};
+using Wav wav = new Wav(@"C:\Users\ollie\Documents\Audacity\test.wav");
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;
 //context.MasterVolume = 0.1f;
 
-AudioSource source = context.CreateSource();
+BufferDescription description = new BufferDescription(PcmType.Pcm, wav.Format);
 
-foreach (string file in files)
+if (wav.IsAdpcm)
 {
-    using Wav wav = new Wav(file);
-    AudioBuffer buffer = context.CreateBuffer(wav.Format, wav.GetPcm());
-    source.SubmitBuffer(buffer);
+    description.Type = PcmType.Adpcm;
+    description.Adpcm = new AdpcmDescription(wav.AdpcmInfo.ChunkSize);
 }
+
+AudioBuffer buffer = context.CreateBuffer(description, wav.GetPcm());
+
+AudioSource source = context.CreateSource();
+source.SubmitBuffer(buffer);
 
 //source.ClearBuffers();
 

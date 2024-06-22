@@ -22,14 +22,14 @@ public unsafe class Context : IDisposable
         _context = context;
     }
 
-    public AudioBuffer CreateBuffer<T>(AudioFormat format, T[] data) where T : unmanaged
-        => CreateBuffer(format, new ReadOnlySpan<T>(data));
+    public AudioBuffer CreateBuffer<T>(BufferDescription description, T[] data) where T : unmanaged
+        => CreateBuffer(description, new ReadOnlySpan<T>(data));
     
-    public AudioBuffer CreateBuffer<T>(AudioFormat format, in ReadOnlySpan<T> data) where T : unmanaged
+    public AudioBuffer CreateBuffer<T>(BufferDescription description, in ReadOnlySpan<T> data) where T : unmanaged
     {
         nuint buffer;
         fixed (T* pData = data)
-            buffer = mxContextCreateBuffer(_context, &format, (byte*) pData, (nuint) (data.Length / sizeof(T)));
+            buffer = mxContextCreateBuffer(_context, &description, (byte*) pData, (nuint) (data.Length / sizeof(T)));
 
         return new AudioBuffer(buffer, _context);
     }

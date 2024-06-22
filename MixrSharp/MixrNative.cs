@@ -22,7 +22,7 @@ public static unsafe class MixrNative
     public static extern void mxDestroyDevice(nint device);
 
     [DllImport(DllName)]
-    public static extern nuint mxContextCreateBuffer(nint context, AudioFormat* format, byte* data, nuint dataLength);
+    public static extern nuint mxContextCreateBuffer(nint context, BufferDescription* format, byte* data, nuint dataLength);
 
     [DllImport(DllName)]
     public static extern nuint mxContextCreateSource(nint context);
@@ -71,4 +71,10 @@ public static unsafe class MixrNative
 
     [DllImport(DllName)]
     public static extern void mxStreamLoadWav(sbyte* path, out nint audioStream);
+
+    [DllImport(DllName)]
+    public static extern bool mxWavIsADPCM(nint stream);
+
+    [DllImport(DllName)]
+    public static extern AdpcmInfo mxWavGetADPCMInfo(nint stream);
 }
