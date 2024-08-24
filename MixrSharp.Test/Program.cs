@@ -3,17 +3,17 @@ using MixrSharp;
 using MixrSharp.Devices;
 using MixrSharp.Stream;
 
-using Wav wav = new Wav(@"C:\Users\ollie\Documents\Audacity\05 Ruby.wav");
+using Wav wav = new Wav(@"C:\Users\ollie\Documents\Audacity\01 Feel (Radio Edit).wav");
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;
 //context.MasterVolume = 0.1f;
 
-SourceDescription description = new SourceDescription(PcmType.Pcm, wav.Format);
+SourceDescription description = new SourceDescription(SourceType.Pcm, wav.Format);
 
 if (wav.IsAdpcm)
 {
-    description.Type = PcmType.Adpcm;
+    description.Type = SourceType.Adpcm;
     description.Adpcm = new AdpcmDescription(wav.AdpcmInfo.ChunkSize);
 }
 

@@ -1,6 +1,6 @@
 ﻿namespace MixrSharp;
 
-public enum PcmType
+public enum SourceType
 {
     Pcm,
     Adpcm
