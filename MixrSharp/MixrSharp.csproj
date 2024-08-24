@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Update="libmixr.dll">
+      <None Update="mixr.dll">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="libmixr.so">

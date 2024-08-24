@@ -1,23 +1,28 @@
-﻿using System.Threading;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using MixrSharp;
 using MixrSharp.Devices;
 using MixrSharp.Stream;
 
-using Wav wav = new Wav(@"C:\Users\ollie\Documents\Audacity\01 Feel (Radio Edit).wav");
+using Flac stream = new Flac(@"C:\Users\ollie\Music\Music\Various Artists\NOW Millennium- 2000 - 2001 (Disc 2)\08 Steal My Sunshine (Single Version).flac");
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;
 //context.MasterVolume = 0.1f;
 
-SourceDescription description = new SourceDescription(SourceType.Pcm, wav.Format);
+SourceDescription description = new SourceDescription(SourceType.Pcm, stream.Format);
 
-if (wav.IsAdpcm)
+/*if (stream.IsAdpcm)
 {
     description.Type = SourceType.Adpcm;
-    description.Adpcm = new AdpcmDescription(wav.AdpcmInfo.ChunkSize);
-}
+    description.Adpcm = new AdpcmDescription(stream.AdpcmInfo.ChunkSize);
+}*/
 
-AudioBuffer buffer = context.CreateBuffer(wav.GetPcm());
+Stopwatch sw = Stopwatch.StartNew();
+AudioBuffer buffer = context.CreateBuffer(stream.GetPcm());
+Console.WriteLine(sw.Elapsed);
+sw.Stop();
 
 AudioSource source = context.CreateSource(description);
 source.SubmitBuffer(buffer);
@@ -25,7 +30,7 @@ source.SubmitBuffer(buffer);
 //source.ClearBuffers();
 
 //source.SubmitBuffer(buffer);
-//source.Speed = 1.15;
+//source.Speed = 2;
 //source.Volume = 0.5f;
 //source.Looping = true;
 //source.Panning = -1.0f;
