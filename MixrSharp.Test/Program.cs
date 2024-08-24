@@ -3,13 +3,13 @@ using MixrSharp;
 using MixrSharp.Devices;
 using MixrSharp.Stream;
 
-using Wav wav = new Wav(@"C:\Users\ollie\Documents\Audacity\test.wav");
+using Wav wav = new Wav(@"C:\Users\ollie\Documents\Audacity\05 Ruby.wav");
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;
 //context.MasterVolume = 0.1f;
 
-BufferDescription description = new BufferDescription(PcmType.Pcm, wav.Format);
+SourceDescription description = new SourceDescription(PcmType.Pcm, wav.Format);
 
 if (wav.IsAdpcm)
 {
@@ -17,9 +17,9 @@ if (wav.IsAdpcm)
     description.Adpcm = new AdpcmDescription(wav.AdpcmInfo.ChunkSize);
 }
 
-AudioBuffer buffer = context.CreateBuffer(description, wav.GetPcm());
+AudioBuffer buffer = context.CreateBuffer(wav.GetPcm());
 
-AudioSource source = context.CreateSource();
+AudioSource source = context.CreateSource(description);
 source.SubmitBuffer(buffer);
 
 //source.ClearBuffers();

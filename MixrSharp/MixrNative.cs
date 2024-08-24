@@ -22,10 +22,10 @@ public static unsafe class MixrNative
     public static extern void mxDestroyDevice(nint device);
 
     [DllImport(DllName)]
-    public static extern nuint mxContextCreateBuffer(nint context, BufferDescription* format, byte* data, nuint dataLength);
+    public static extern nuint mxContextCreateBuffer(nint context, byte* data, nuint dataLength);
 
     [DllImport(DllName)]
-    public static extern nuint mxContextCreateSource(nint context);
+    public static extern nuint mxContextCreateSource(nint context, SourceDescription* description);
 
     [DllImport(DllName)]
     public static extern void mxContextSetMasterVolume(nint context, float volume);

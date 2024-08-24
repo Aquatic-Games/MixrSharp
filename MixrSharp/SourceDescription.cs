@@ -3,7 +3,7 @@
 namespace MixrSharp;
 
 [StructLayout(LayoutKind.Explicit)]
-public struct BufferDescription
+public struct SourceDescription
 {
     [FieldOffset(0)] public PcmType Type;
 
@@ -11,7 +11,7 @@ public struct BufferDescription
 
     [FieldOffset(16)] public AdpcmDescription Adpcm;
 
-    public BufferDescription(PcmType type, AudioFormat format)
+    public SourceDescription(PcmType type, AudioFormat format)
     {
         Type = type;
         Format = format;
