@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using static MixrSharp.MixrNative;
 
 namespace MixrSharp;
 
-public struct AudioSource : IDisposable
+public class AudioSource : IDisposable
 {
+    public event OnBufferFinished BufferFinished = delegate { };
+    
     private readonly nint _context;
+    private readonly GCHandle _cbHandle;
+    private bool _isDisposed;
     
     public readonly nuint ID;
 
@@ -29,10 +34,27 @@ public struct AudioSource : IDisposable
         set => mxSourceSetPanning(_context, ID, value);
     }
 
-    internal AudioSource(UIntPtr id, IntPtr context)
+    public SourceState State => mxSourceGetState(_context, ID);
+
+    public ulong Position => mxSourceGetPositionSamples(_context, ID);
+
+    public double PositionSecs => mxSourceGetPositionSeconds(_context, ID);
+
+    internal unsafe AudioSource(UIntPtr id, IntPtr context)
     {
         ID = id;
         _context = context;
+
+        SourceBufferFinishedCallback cb = BufferFinishedCallback;
+        _cbHandle = GCHandle.Alloc(cb);
+
+        mxSourceSetBufferFinishedCallback(_context, id,
+            (delegate*<void*, void>) Marshal.GetFunctionPointerForDelegate(cb), null);
+    }
+
+    ~AudioSource()
+    {
+        Dispose();
     }
 
     public void SetChannelVolumes(float volumeL, float volumeR)
@@ -62,9 +84,22 @@ public struct AudioSource : IDisposable
     {
         mxSourceStop(_context, ID);
     }
+    
+    private unsafe void BufferFinishedCallback(void* userData)
+    {
+        BufferFinished();
+    }
 
     public void Dispose()
     {
-        
+        if (_isDisposed)
+            return;
+
+        _isDisposed = true;
+
+        BufferFinished = null;
+        mxContextDestroySource(_context, ID);
     }
+
+    public delegate void OnBufferFinished();
 }

@@ -5,53 +5,65 @@ using MixrSharp;
 using MixrSharp.Devices;
 using MixrSharp.Stream;
 
-using Flac stream = new Flac(@"C:\Users\ollie\Music\Music\Various Artists\NOW Millennium- 2000 - 2001 (Disc 2)\08 Steal My Sunshine (Single Version).flac");
+if (args.Length < 1)
+{
+    Console.WriteLine("Please give a filename as the argument.");
+    return;
+}
+
+Flac stream = new Flac(args[0]);
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;
-//context.MasterVolume = 0.1f;
+
+byte[] buffer = new byte[stream.Format.SampleRate];
+
+stream.GetBuffer(buffer);
+AudioBuffer buffer1 = context.CreateBuffer(buffer);
+
+stream.GetBuffer(buffer);
+AudioBuffer buffer2 = context.CreateBuffer(buffer);
+
+AudioBuffer[] buffers = [buffer1, buffer2];
+int currentBuffer = 0;
 
 SourceDescription description = new SourceDescription(SourceType.Pcm, stream.Format);
 
-/*if (stream.IsAdpcm)
-{
-    description.Type = SourceType.Adpcm;
-    description.Adpcm = new AdpcmDescription(stream.AdpcmInfo.ChunkSize);
-}*/
-
-Stopwatch sw = Stopwatch.StartNew();
-AudioBuffer buffer = context.CreateBuffer(stream.GetPcm());
-Console.WriteLine(sw.Elapsed);
-sw.Stop();
-
 AudioSource source = context.CreateSource(description);
-source.SubmitBuffer(buffer);
+source.SubmitBuffer(buffer1);
+source.SubmitBuffer(buffer2);
 
-//source.ClearBuffers();
+ulong totalBytes = 0;
 
-//source.SubmitBuffer(buffer);
-//source.Speed = 2;
-//source.Volume = 0.5f;
-//source.Looping = true;
-//source.Panning = -1.0f;
-//source.SetChannelVolumes(-1, 1);
+source.BufferFinished += () =>
+{
+    ulong numBytes = stream.GetBuffer(buffer);
+    totalBytes += numBytes;
+    
+   // Console.WriteLine($"Buffer returned {numBytes} bytes.");
+
+    if (numBytes == 0)
+        return;
+
+    buffers[currentBuffer].Update(buffer);
+    source.SubmitBuffer(buffers[currentBuffer]);
+
+    currentBuffer++;
+    if (currentBuffer >= buffers.Length)
+        currentBuffer = 0;
+};
+
 source.Play();
 
-bool test = false;
-
-while (true)
+while (source.State == SourceState.Playing)
 {
+    AudioFormat fmt = stream.Format;
+    ulong totalSamples = (totalBytes / 4) + source.Position;
+    ulong currentSecond = totalSamples / fmt.SampleRate;
+    
+    Console.WriteLine($"{currentSecond / 60:00}:{currentSecond % 60:00}");
     Thread.Sleep(1000);
-    
-    /*source.Stop();
-    source.Play();*/
-    
-    /*if (test)
-        source.Play();
-    else
-        source.Pause();
-
-    test = !test;*/
 }
 
 device.Dispose();
+stream.Dispose();

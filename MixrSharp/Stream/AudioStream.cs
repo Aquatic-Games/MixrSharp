@@ -8,6 +8,17 @@ public abstract class AudioStream : IDisposable
     protected nint Stream;
 
     public AudioFormat Format => mxStreamGetFormat(Stream);
+    
+    public ulong PcmLengthInBytes => mxStreamGetPCMLengthInBytes(Stream);
+
+    public unsafe ulong GetBuffer(Span<byte> buffer)
+    {
+        fixed (byte* pBuffer = buffer)
+            return mxStreamGetBuffer(Stream, pBuffer, (nuint) buffer.Length);
+    }
+
+    public void Restart()
+        => mxStreamRestart(Stream);
 
     public unsafe byte[] GetPcm()
     {
