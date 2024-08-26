@@ -74,6 +74,21 @@ public static unsafe class MixrNative
     public static extern SourceState mxSourceGetState(nint context, nuint source);
 
     [DllImport(DllName)]
+    public static extern double mxSourceGetSpeed(nint context, nuint source);
+    
+    [DllImport(DllName)]
+    public static extern float mxSourceGetVolume(nint context, nuint source);
+    
+    [DllImport(DllName)]
+    public static extern bool mxSourceGetLooping(nint context, nuint source);
+    
+    [DllImport(DllName)]
+    public static extern float mxSourceGetPanning(nint context, nuint source);
+    
+    [DllImport(DllName)]
+    public static extern void mxSourceGetChannelVolumes(nint context, nuint source, float* volumeL, float* volumeR);
+
+    [DllImport(DllName)]
     public static extern nuint mxSourceGetPositionSamples(nint context, nuint source);
 
     [DllImport(DllName)]

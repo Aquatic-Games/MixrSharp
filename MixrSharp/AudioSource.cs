@@ -9,29 +9,49 @@ public class AudioSource : IDisposable
     public event OnBufferFinished BufferFinished = delegate { };
     
     private readonly nint _context;
-    private readonly GCHandle _cbHandle;
+    private GCHandle _cbHandle;
     private bool _isDisposed;
     
     public readonly nuint ID;
 
     public double Speed
     {
+        get => mxSourceGetSpeed(_context, ID);
         set => mxSourceSetSpeed(_context, ID, value);
     }
 
     public float Volume
     {
+        get => mxSourceGetVolume(_context, ID);
         set => mxSourceSetVolume(_context, ID, value);
     }
 
     public bool Looping
     {
+        get => mxSourceGetLooping(_context, ID);
         set => mxSourceSetLooping(_context, ID, value);
     }
 
     public float Panning
     {
+        get => mxSourceGetPanning(_context, ID);
         set => mxSourceSetPanning(_context, ID, value);
+    }
+
+    public (float l, float r) ChannelVolumes
+    {
+        get
+        {
+            unsafe
+            {
+                float l, r;
+                mxSourceGetChannelVolumes(_context, ID, &l, &r);
+
+                return (l, r);
+            }
+        }
+        
+        set => mxSourceSetChannelVolumes(_context, ID, value.l, value.r);
     }
 
     public SourceState State => mxSourceGetState(_context, ID);
@@ -56,9 +76,6 @@ public class AudioSource : IDisposable
     {
         Dispose();
     }
-
-    public void SetChannelVolumes(float volumeL, float volumeR)
-        => mxSourceSetChannelVolumes(_context, ID, volumeL, volumeR);
 
     public void SubmitBuffer(AudioBuffer buffer)
     {
@@ -98,6 +115,7 @@ public class AudioSource : IDisposable
         _isDisposed = true;
 
         BufferFinished = null;
+        _cbHandle.Free();
         mxContextDestroySource(_context, ID);
     }
 

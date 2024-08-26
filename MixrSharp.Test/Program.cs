@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Threading.Tasks;
 using MixrSharp;
 using MixrSharp.Devices;
 using MixrSharp.Stream;
@@ -37,28 +38,38 @@ ulong totalBytes = 0;
 
 source.BufferFinished += () =>
 {
-    ulong numBytes = stream.GetBuffer(buffer);
-    totalBytes += numBytes;
-    
-   // Console.WriteLine($"Buffer returned {numBytes} bytes.");
+    Task.Run(() =>
+    {
+        ulong numBytes = stream.GetBuffer(buffer);
+        totalBytes += numBytes;
 
-    if (numBytes == 0)
-        return;
+        // Console.WriteLine($"Buffer returned {numBytes} bytes.");
 
-    buffers[currentBuffer].Update(buffer);
-    source.SubmitBuffer(buffers[currentBuffer]);
+        if (numBytes == 0)
+            return;
 
-    currentBuffer++;
-    if (currentBuffer >= buffers.Length)
-        currentBuffer = 0;
+        buffers[currentBuffer].Update(buffer);
+        source.SubmitBuffer(buffers[currentBuffer]);
+
+        currentBuffer++;
+        if (currentBuffer >= buffers.Length)
+            currentBuffer = 0;
+    });
 };
 
+source.Speed = 5;
 source.Play();
+
+Console.WriteLine(source.Speed);
+Console.WriteLine(source.Volume);
+Console.WriteLine(source.Looping);
+Console.WriteLine(source.Panning);
+Console.WriteLine(source.ChannelVolumes);
 
 while (source.State == SourceState.Playing)
 {
     AudioFormat fmt = stream.Format;
-    ulong totalSamples = (totalBytes / 4) + source.Position;
+    ulong totalSamples = (totalBytes / 8) + source.Position;
     ulong currentSecond = totalSamples / fmt.SampleRate;
     
     Console.WriteLine($"{currentSecond / 60:00}:{currentSecond % 60:00}");
