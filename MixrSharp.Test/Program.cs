@@ -57,7 +57,7 @@ source.BufferFinished += () =>
     });
 };
 
-source.Speed = 5;
+//source.Speed = 5;
 source.Play();
 
 Console.WriteLine(source.Speed);
@@ -69,7 +69,24 @@ Console.WriteLine(source.ChannelVolumes);
 while (source.State == SourceState.Playing)
 {
     AudioFormat fmt = stream.Format;
-    ulong totalSamples = (totalBytes / 8) + source.Position;
+
+    int fmtDivisor = fmt.DataType switch
+    {
+        DataType.U8 => 1,
+        DataType.I16 => 2,
+        DataType.I32 => 4,
+        DataType.F32 => 4,
+        _ => throw new ArgumentOutOfRangeException()
+    };
+    
+    fmtDivisor *= fmt.Channels switch
+    {
+        Channels.Mono => 1,
+        Channels.Stereo => 2,
+        _ => throw new ArgumentOutOfRangeException()
+    };
+    
+    ulong totalSamples = (totalBytes / (ulong) fmtDivisor) + source.Position;
     ulong currentSecond = totalSamples / fmt.SampleRate;
     
     Console.WriteLine($"{currentSecond / 60:00}:{currentSecond % 60:00}");
