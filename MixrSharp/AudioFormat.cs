@@ -4,9 +4,9 @@ public struct AudioFormat
 {
     public DataType DataType;
     public uint SampleRate;
-    public Channels Channels;
+    public byte Channels;
 
-    public AudioFormat(DataType dataType, uint sampleRate, Channels channels)
+    public AudioFormat(DataType dataType, uint sampleRate, byte channels)
     {
         DataType = dataType;
         SampleRate = sampleRate;

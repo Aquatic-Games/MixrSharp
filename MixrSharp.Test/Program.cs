@@ -12,7 +12,7 @@ if (args.Length < 1)
     return;
 }
 
-Flac stream = new Flac(args[0]);
+Vorbis stream = new Vorbis(args[0]);
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;
@@ -57,7 +57,7 @@ source.BufferFinished += () =>
     });
 };
 
-//source.Speed = 5;
+//source.Speed = 2;
 source.Play();
 
 Console.WriteLine(source.Speed);
@@ -78,13 +78,8 @@ while (source.State == SourceState.Playing)
         DataType.F32 => 4,
         _ => throw new ArgumentOutOfRangeException()
     };
-    
-    fmtDivisor *= fmt.Channels switch
-    {
-        Channels.Mono => 1,
-        Channels.Stereo => 2,
-        _ => throw new ArgumentOutOfRangeException()
-    };
+
+    fmtDivisor *= fmt.Channels;
     
     ulong totalSamples = (totalBytes / (ulong) fmtDivisor) + source.Position;
     ulong currentSecond = totalSamples / fmt.SampleRate;

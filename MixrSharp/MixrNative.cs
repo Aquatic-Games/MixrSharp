@@ -119,6 +119,9 @@ public static unsafe class MixrNative
     public static extern void mxStreamLoadWav(sbyte* path, out nint audioStream);
     
     [DllImport(DllName)]
+    public static extern void mxStreamLoadVorbis(sbyte* path, out nint audioStream);
+    
+    [DllImport(DllName)]
     public static extern void mxStreamLoadFlac(sbyte* path, out nint audioStream);
 
     [DllImport(DllName)]
