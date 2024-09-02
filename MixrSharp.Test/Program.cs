@@ -12,7 +12,7 @@ if (args.Length < 1)
     return;
 }
 
-Vorbis stream = new Vorbis(args[0]);
+AudioStream stream = new Mp3(args[0]);
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;
