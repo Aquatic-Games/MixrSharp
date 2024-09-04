@@ -13,6 +13,7 @@ if (args.Length < 1)
 }
 
 AudioStream stream = new Mp3(args[0]);
+Console.WriteLine(stream.LengthInSamples / stream.Format.SampleRate);
 
 Device device = new SdlDevice(48000);
 Context context = device.Context;

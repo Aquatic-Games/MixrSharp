@@ -9,7 +9,7 @@ public abstract class AudioStream : IDisposable
 
     public AudioFormat Format => mxStreamGetFormat(Stream);
     
-    public ulong PcmLengthInBytes => mxStreamGetPCMLengthInBytes(Stream);
+    public ulong LengthInSamples => mxStreamGetLengthInSamples(Stream);
 
     public unsafe ulong GetBuffer(Span<byte> buffer)
     {
