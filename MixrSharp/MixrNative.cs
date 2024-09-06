@@ -116,16 +116,16 @@ public static unsafe class MixrNative
     public static extern void mxDestroyStream(nint stream);
 
     [DllImport(DllName)]
-    public static extern void mxStreamLoadWav(sbyte* path, out nint audioStream);
+    public static extern void mxStreamLoadWav(string path, out nint audioStream);
     
     [DllImport(DllName)]
-    public static extern void mxStreamLoadVorbis(sbyte* path, out nint audioStream);
+    public static extern void mxStreamLoadVorbis(string path, out nint audioStream);
     
     [DllImport(DllName)]
-    public static extern void mxStreamLoadFlac(sbyte* path, out nint audioStream);
+    public static extern void mxStreamLoadFlac(string path, out nint audioStream);
     
     [DllImport(DllName)]
-    public static extern void mxStreamLoadMp3(sbyte* path, out nint audioStream);
+    public static extern void mxStreamLoadMp3(string path, out nint audioStream);
 
     [DllImport(DllName)]
     public static extern bool mxWavIsADPCM(nint stream);
