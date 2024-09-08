@@ -20,6 +20,9 @@ public abstract class AudioStream : IDisposable
     public void Restart()
         => mxStreamRestart(Stream);
 
+    public void SeekToSample(ulong sample)
+        => mxStreamSeekToSample(Stream, (nuint) sample);
+
     public unsafe byte[] GetPcm()
     {
         nuint dataLength;

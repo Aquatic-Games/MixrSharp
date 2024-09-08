@@ -7,9 +7,12 @@ namespace MixrSharp;
 public class AudioSource : IDisposable
 {
     public event OnBufferFinished BufferFinished = delegate { };
-    
+
+    public event OnStateChanged StateChanged = delegate { };
+
     private readonly nint _context;
-    private GCHandle _cbHandle;
+    private GCHandle _bufferCbHandle;
+    private GCHandle _stateCbHandle;
     private bool _isDisposed;
     
     public readonly nuint ID;
@@ -65,11 +68,17 @@ public class AudioSource : IDisposable
         ID = id;
         _context = context;
 
-        SourceBufferFinishedCallback cb = BufferFinishedCallback;
-        _cbHandle = GCHandle.Alloc(cb);
+        SourceBufferFinishedCallback bufferCb = BufferFinishedCallback;
+        SourceStateChangedCallback stateCb = StateChangedCallback;
+        
+        _bufferCbHandle = GCHandle.Alloc(bufferCb);
+        _stateCbHandle = GCHandle.Alloc(stateCb);
 
         mxSourceSetBufferFinishedCallback(_context, id,
-            (delegate*<void*, void>) Marshal.GetFunctionPointerForDelegate(cb), null);
+            (delegate*<void*, void>) Marshal.GetFunctionPointerForDelegate(bufferCb), null);
+
+        mxSourceSetStateChangedCallback(_context, id,
+            (delegate*<SourceState, void*, void>) Marshal.GetFunctionPointerForDelegate(stateCb), null);
     }
 
     ~AudioSource()
@@ -106,6 +115,11 @@ public class AudioSource : IDisposable
     {
         BufferFinished();
     }
+    
+    private unsafe void StateChangedCallback(SourceState state, void* userdata)
+    {
+        StateChanged(state);
+    }
 
     public void Dispose()
     {
@@ -114,10 +128,14 @@ public class AudioSource : IDisposable
 
         _isDisposed = true;
 
+        StateChanged = null;
         BufferFinished = null;
-        _cbHandle.Free();
+        _stateCbHandle.Free();
+        _bufferCbHandle.Free();
         mxContextDestroySource(_context, ID);
     }
 
     public delegate void OnBufferFinished();
+
+    public delegate void OnStateChanged(SourceState state);
 }

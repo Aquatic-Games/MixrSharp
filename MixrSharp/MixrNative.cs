@@ -71,6 +71,9 @@ public static unsafe class MixrNative
     public static extern void mxSourceSetBufferFinishedCallback(nint context, nuint source, delegate*<void*, void> callback, void* userData);
 
     [DllImport(DllName)]
+    public static extern void mxSourceSetStateChangedCallback(nint context, nuint source, delegate*<SourceState, void*, void> callback, void* userData);
+    
+    [DllImport(DllName)]
     public static extern SourceState mxSourceGetState(nint context, nuint source);
 
     [DllImport(DllName)]
@@ -105,6 +108,9 @@ public static unsafe class MixrNative
 
     [DllImport(DllName)]
     public static extern void mxStreamRestart(nint stream);
+
+    [DllImport(DllName)]
+    public static extern void mxStreamSeekToSample(nint stream, nuint sample);
     
     [DllImport(DllName)]
     public static extern nuint mxStreamGetLengthInSamples(nint stream);
@@ -134,4 +140,6 @@ public static unsafe class MixrNative
     public static extern AdpcmInfo mxWavGetADPCMInfo(nint stream);
 
     public delegate void SourceBufferFinishedCallback(void* userData);
+
+    public delegate void SourceStateChangedCallback(SourceState state, void* userData);
 }

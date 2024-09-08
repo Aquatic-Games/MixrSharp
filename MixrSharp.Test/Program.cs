@@ -37,6 +37,8 @@ source.SubmitBuffer(buffer2);
 
 ulong totalBytes = 0;
 
+source.StateChanged += state => Console.WriteLine(state);
+
 source.BufferFinished += () =>
 {
     Task.Run(() =>
@@ -86,7 +88,9 @@ while (source.State == SourceState.Playing)
     ulong currentSecond = totalSamples / fmt.SampleRate;
     
     Console.WriteLine($"{currentSecond / 60:00}:{currentSecond % 60:00}");
-    Thread.Sleep(1000);
+    Thread.Sleep(5000);
+    
+    stream.SeekToSample(60 * fmt.SampleRate);
 }
 
 device.Dispose();
