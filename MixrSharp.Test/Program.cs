@@ -12,13 +12,13 @@ if (args.Length < 1)
     return;
 }
 
-AudioStream stream = new Mp3(args[0]);
+AudioStream stream = new Wav(args[0]);
 Console.WriteLine(stream.LengthInSamples / stream.Format.SampleRate);
 
-Device device = new SdlDevice(48000);
+Device device = new SdlDevice(44100);
 Context context = device.Context;
 
-byte[] buffer = new byte[stream.Format.SampleRate];
+byte[] buffer = new byte[48000];
 
 stream.GetBuffer(buffer);
 AudioBuffer buffer1 = context.CreateBuffer(buffer);
@@ -35,8 +35,6 @@ AudioSource source = context.CreateSource(description);
 source.SubmitBuffer(buffer1);
 source.SubmitBuffer(buffer2);
 
-ulong totalBytes = 0;
-
 source.StateChanged += state => Console.WriteLine(state);
 
 source.BufferFinished += () =>
@@ -44,12 +42,26 @@ source.BufferFinished += () =>
     Task.Run(() =>
     {
         ulong numBytes = stream.GetBuffer(buffer);
-        totalBytes += numBytes;
-
-        // Console.WriteLine($"Buffer returned {numBytes} bytes.");
+        
+        //if (numBytes == 0)
+        //    return;
 
         if (numBytes == 0)
+        {
+            stream.SeekToSample(2168470);
             return;
+        }
+
+        /*const ulong loopEnd = 4233600;
+
+        if (stream.PositionInSamples > loopEnd)
+        {
+            Console.WriteLine(stream.PositionInSamples - loopEnd);
+            ulong samplesToChop = stream.PositionInSamples - loopEnd;
+            int bytesToChop = (int) samplesToChop * stream.Format.BytesPerSample * stream.Format.Channels;
+            stream.SeekToSample(650916);
+            buffer = buffer[..^bytesToChop];
+        }*/
 
         buffers[currentBuffer].Update(buffer);
         source.SubmitBuffer(buffers[currentBuffer]);
@@ -60,7 +72,7 @@ source.BufferFinished += () =>
     });
 };
 
-//source.Speed = 2;
+//source.Speed = 4;
 source.Play();
 
 Console.WriteLine(source.Speed);
@@ -81,16 +93,12 @@ while (source.State == SourceState.Playing)
         DataType.F32 => 4,
         _ => throw new ArgumentOutOfRangeException()
     };
-
-    fmtDivisor *= fmt.Channels;
     
-    ulong totalSamples = (totalBytes / (ulong) fmtDivisor) + source.Position;
+    ulong totalSamples = stream.PositionInSamples + source.Position;
     ulong currentSecond = totalSamples / fmt.SampleRate;
     
     Console.WriteLine($"{currentSecond / 60:00}:{currentSecond % 60:00}");
-    Thread.Sleep(5000);
-    
-    stream.SeekToSample(60 * fmt.SampleRate);
+    Thread.Sleep(1000);
 }
 
 device.Dispose();

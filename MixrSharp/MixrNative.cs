@@ -114,6 +114,9 @@ public static unsafe class MixrNative
     
     [DllImport(DllName)]
     public static extern nuint mxStreamGetLengthInSamples(nint stream);
+
+    [DllImport(DllName)]
+    public static extern nuint mxStreamGetPositionInSamples(nint stream);
     
     [DllImport(DllName)]
     public static extern void mxStreamGetPCM(nint stream, byte* data, nuint* dataLength);

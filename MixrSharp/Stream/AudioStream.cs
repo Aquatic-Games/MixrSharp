@@ -11,6 +11,8 @@ public abstract class AudioStream : IDisposable
     
     public ulong LengthInSamples => mxStreamGetLengthInSamples(Stream);
 
+    public ulong PositionInSamples => mxStreamGetPositionInSamples(Stream);
+
     public unsafe ulong GetBuffer(Span<byte> buffer)
     {
         fixed (byte* pBuffer = buffer)
