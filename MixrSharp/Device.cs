@@ -3,21 +3,26 @@ using static MixrSharp.MixrNative;
 
 namespace MixrSharp;
 
-public abstract class Device : IDisposable
+public sealed class Device : IDisposable
 {
-    protected nint DevicePointer;
+    private readonly nint _devicePointer;
 
     public Context Context
     {
         get
         {
-            mxDeviceGetContext(DevicePointer, out nint context);
+            mxDeviceGetContext(_devicePointer, out nint context);
             return new Context(context);
         }
     }
-    
-    public virtual void Dispose()
+
+    public Device(uint sampleRate)
     {
-        mxDestroyDevice(DevicePointer);
+        mxCreateDevice(sampleRate, out _devicePointer);
+    }
+    
+    public void Dispose()
+    {
+        mxDestroyDevice(_devicePointer);
     }
 }

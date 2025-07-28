@@ -13,7 +13,7 @@ public static unsafe class MixrNative
     public static extern void mxDestroyContext(nint context);
 
     [DllImport(DllName)]
-    public static extern void mxCreateSDLDevice(uint sampleRate, ushort periodSize, out nint device);
+    public static extern void mxCreateDevice(uint sampleRate, out nint device);
 
     [DllImport(DllName)]
     public static extern void mxDeviceGetContext(nint device, out nint context);
@@ -27,7 +27,6 @@ public static unsafe class MixrNative
     [DllImport(DllName)]
     public static extern void mxContextDestroyBuffer(nint context, nuint buffer);
     
-
     [DllImport(DllName)]
     public static extern nuint mxContextCreateSource(nint context, SourceDescription* description);
     
@@ -99,6 +98,9 @@ public static unsafe class MixrNative
     
     [DllImport(DllName)]
     public static extern void mxContextSetMasterVolume(nint context, float volume);
+
+    [DllImport(DllName)]
+    public static extern void mxContextMixToStereoF32Buffer(nint context, float* buffer, nuint length);
 
     [DllImport(DllName)]
     public static extern AudioFormat mxStreamGetFormat(nint stream);

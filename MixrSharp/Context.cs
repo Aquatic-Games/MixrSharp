@@ -40,6 +40,12 @@ public unsafe class Context : IDisposable
 
         return new AudioSource(source, _context);
     }
+
+    public void MixToStereoF32Buffer(Span<float> buffer)
+    {
+        fixed (float* pBuffer = buffer)
+            mxContextMixToStereoF32Buffer(_context, pBuffer, (nuint) buffer.Length);
+    }
     
     public void Dispose()
     {

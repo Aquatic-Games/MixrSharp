@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using MixrSharp;
-using MixrSharp.Devices;
 using MixrSharp.Stream;
 
 if (args.Length < 1)
@@ -15,7 +14,7 @@ if (args.Length < 1)
 AudioStream stream = new Wav(args[0]);
 Console.WriteLine(stream.LengthInSamples / stream.Format.SampleRate);
 
-Device device = new SdlDevice(44100);
+Device device = new Device(44100);
 Context context = device.Context;
 
 byte[] buffer = new byte[48000];
