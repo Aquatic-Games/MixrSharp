@@ -9,6 +9,7 @@ public unsafe class Context : IDisposable
 
     public float MasterVolume
     {
+        get => mxContextGetMasterVolume(_context);
         set => mxContextSetMasterVolume(_context, value);
     }
 

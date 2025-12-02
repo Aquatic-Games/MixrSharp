@@ -95,6 +95,9 @@ public static unsafe class MixrNative
 
     [DllImport(DllName)]
     public static extern double mxSourceGetPositionSeconds(nint context, nuint source);
+
+    [DllImport(DllName)]
+    public static extern float mxContextGetMasterVolume(nint context);
     
     [DllImport(DllName)]
     public static extern void mxContextSetMasterVolume(nint context, float volume);
