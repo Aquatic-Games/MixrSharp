@@ -5,17 +5,29 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Version>0.1.0</Version>
+        <Authors>aquagoose</Authors>
+        <Description>.NET bindings for mixr, a fast audio playback library.</Description>
+        <PackageTags>audio</PackageTags>
+        <RepositoryUrl>https://github.com/Aquatic-Games/MixrSharp</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
     </PropertyGroup>
 
     <ItemGroup>
       <None Update="mixr.dll">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>true</Pack>
+        <PackagePath>runtimes/win-x64/native</PackagePath>
       </None>
       <None Update="libmixr.so">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>true</Pack>
+        <PackagePath>runtimes/linux-x64/native</PackagePath>
       </None>
       <None Update="libmixr.dylib">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Pack>true</Pack>
+        <PackagePath>runtimes/osx-arm64/native</PackagePath>
       </None>
     </ItemGroup>
 
