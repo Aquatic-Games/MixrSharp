@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixrSharp", "MixrSharp\MixrSharp.csproj", "{06168308-8626-446B-9100-0C84F69DC4F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixrSharp.Test", "MixrSharp.Test\MixrSharp.Test.csproj", "{9760B19C-B5B5-482D-8B11-2DFF6C82C57B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixrSharp.Example", "MixrSharp.Example\MixrSharp.Example.csproj", "{9760B19C-B5B5-482D-8B11-2DFF6C82C57B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

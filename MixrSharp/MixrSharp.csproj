@@ -5,7 +5,7 @@
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Version>0.1.1</Version>
+        <Version>0.2.0</Version>
         <Authors>aquagoose</Authors>
         <Description>.NET bindings for mixr, a fast audio playback library.</Description>
         <PackageTags>audio</PackageTags>
@@ -29,6 +29,10 @@
         <Pack>true</Pack>
         <PackagePath>runtimes/osx-arm64/native</PackagePath>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Silk.NET.SDL" Version="2.23.0" />
     </ItemGroup>
 
 </Project>
